@@ -1,14 +1,14 @@
 from Summarizer import Summarizer
-from absl import app
-from absl import flags
+from absl import app, flags
 import numpy as np
+import re
 
 
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string(
     "text_path",
-    "",
+    "texts/to_summarize.txt",
     "path to the text to summarize"
 )
 
@@ -37,9 +37,8 @@ flags.DEFINE_bool(
 )
 
 
-def summarize(model, method, text, nb_sentences,viz=False):
-    summarizer = Summarizer()
-    summarizer.init_model(model, log=True)
+def summarize(model, method, text, nb_sentences, viz=False):
+    summarizer = Summarizer(model, log=True)
 
     summarizer.fit(text)
     
@@ -61,22 +60,30 @@ def summarize(model, method, text, nb_sentences,viz=False):
 def load_preprocess_text(path):
     with open(path, 'r') as f:
         text = f.read()
-    
+
+    r = '\(.+\)'
+    print('numbre de caractères du texte :', len(text))
+    text = re.sub(r, '', text)
+    l = len(text)
     text = text.split('.')
 
-    return np.array(text)
+    return np.array(text), l
 
 
 def main(_):
-    model = FLAGS.model 
+    model = FLAGS.model
     method = FLAGS.method 
     path_text = FLAGS.text_path
     nb_sentences = FLAGS.nb_sentences
+    viz = False
 
-    text = load_preprocess_text(path_text)
-    summary = summarize(model, method, text, nb_sentences,viz)
-    for sentence in summary:
-        print(sentence)
+    text, long = load_preprocess_text(path_text)
+    print("nom du modèle: ", model)
+    summary = summarize(model, method, text, nb_sentences, viz)
+    result = ". ".join(summary) + '.'
+    print("longueur du texte nettoyé: ", long)
+    print("longueur du résumé: ", len(result))
+    print("résumé:\n", result)
 
 
 if __name__ == '__main__':
