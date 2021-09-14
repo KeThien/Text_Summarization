@@ -11,3 +11,4 @@ scikit-learn~=0.24.2
 torch~=1.9.0
 absl-py~=0.13.0
 sentencepiece~=0.1.90
+streamline~=0.88.0
