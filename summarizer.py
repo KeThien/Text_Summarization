@@ -23,7 +23,7 @@ def summarize(text, model="plguillou/t5-base-fr-sum-cnndm", device=-1, min_lengt
 
 if __name__ == "__main__":
     dirpath = os.path.dirname(os.path.realpath(__file__))
-    filepath = dirpath + "/../texts/to_summarize.txt"
+    filepath = dirpath + "/texts/to_summarize.txt"
 
 # Open and read the article
     f = open(filepath, "r", encoding="utf-8")
